@@ -1,15 +1,25 @@
 /* global instantsearch algoliasearch */
 
 app({
-  appId: 'latency',
-  apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-  indexName: 'instant_search',
+  appId: 'TIT2KPDJCE',
+  apiKey: 'af6b4906bf10927526b37040eae3ce5e',
+  indexName: 'algolia-demo',
   searchParameters: {
     hitsPerPage: 10,
+    clickAnalytics: true
   },
 });
 
+// Optional: set the analytics user ID
+// window.aa('setUserToken', 'USER_ID');
+
 function app(opts) {
+  window.aa('init', {
+    appId: opts.appId,
+    apiKey: opts.apiKey,
+    useCookie: true
+  });
+
   // ---------------------
   //
   //  Init
@@ -21,6 +31,12 @@ function app(opts) {
     routing: true,
     searchFunction: opts.searchFunction,
   });
+
+  const insightsMiddleware = instantsearch.middlewares.createInsightsMiddleware({
+    insightsClient: window.aa,
+  })
+
+  search.use(insightsMiddleware);
 
   // ---------------------
   //
